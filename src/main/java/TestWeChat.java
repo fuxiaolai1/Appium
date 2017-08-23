@@ -27,42 +27,50 @@ import java.util.concurrent.TimeUnit;
  * Mail：jihaifeng@raiyi.com
  */
 public class TestWeChat {
-    private AndroidDriver driver;
-    @Before
+    private static AndroidDriver driver;
+
+    public static final String deviceName = "vivo X7";
+    public static final String platformName = "Android";
+    public static final String platformVersion = "7.1.1";
+    public static final String appPackage = "com.tencent.mm";
+    public static final String appActivity = "com.tencent.mm.ui.LauncherUI";
+
+    @BeforeClass
     public void setUp() throws Exception {
         //设置apk的路径
         File classpathRoot = new File(System.getProperty("user.dir"));
         File appDir = new File(classpathRoot, "apps");
-        File app = new File(appDir, "ContactManager.apk");
+        File app = new File(appDir, "微信.apk");
 
         //设置自动化相关参数
         DesiredCapabilities capabilities = new DesiredCapabilities();
         capabilities.setCapability(CapabilityType.BROWSER_NAME, "");
-        capabilities.setCapability("platformName", "Android");
-        capabilities.setCapability("deviceName", "Android Emulator");
+        capabilities.setCapability("platformName", platformName);
+        capabilities.setCapability("deviceName", deviceName);
 
         //设置安卓系统版本
-        capabilities.setCapability("platformVersion", "4.3");
-        //设置apk路径
-        capabilities.setCapability("app", app.getAbsolutePath());
+        capabilities.setCapability("platformVersion", platformVersion);
+//        //设置apk路径
+//        capabilities.setCapability("app", app.getAbsolutePath());
 
         //设置app的主包名和主类名
-        capabilities.setCapability("appPackage", "com.example.android.contactmanager");
-        capabilities.setCapability("appActivity", ".ContactManager");
+        capabilities.setCapability("appPackage", appPackage);
+        capabilities.setCapability("appActivity", appActivity);
 
         //初始化
-        driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver = new AndroidDriver(new URL("http://localhost:4723/wd/hub"), capabilities);
     }
 
     @Test
-    public void addContact(){
-        WebElement el = driver.findElement(By.name("Add Contact"));
-        el.click();
-        List<WebElement> textFieldsList = driver.findElementsByClassName("android.widget.EditText");
-        textFieldsList.get(0).sendKeys("Some Name");
-        textFieldsList.get(2).sendKeys("Some@example.com");
-        driver.swipe(100, 500, 100, 100, 2);
-        driver.findElementByName("Save").click();
+    public void testWeChat() {
+        System.out.println("driver：" + driver);
+//        WebElement el = driver.findElement(By.name("Add Contact"));
+//        el.click();
+//        List<WebElement> textFieldsList = driver.findElementsByClassName("android.widget.EditText");
+//        textFieldsList.get(0).sendKeys("Some Name");
+//        textFieldsList.get(2).sendKeys("Some@example.com");
+//        driver.swipe(100, 500, 100, 100, 2);
+//        driver.findElementByName("Save").click();
     }
 
     @After
