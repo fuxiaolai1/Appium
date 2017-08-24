@@ -1,5 +1,6 @@
 package com.jihf.test;
 
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.remote.MobileCapabilityType;
 
@@ -19,7 +20,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 
-
 /**
  * Func：
  * Desc:
@@ -31,11 +31,11 @@ public class TestTouTiao {
 
     private static AndroidDriver driver;
 
-    public static final String deviceName = "F8UDU15120002671";
-    public static final String platformName = "Android";
-    public static final String platformVersion = "6.0";
-    public static final String appPackage = "com.ss.android.article.news";
-    public static final String appActivity = "com.ss.android.article.news.activity.SplashActivity";
+    private static final String deviceName = "F8UDU15120002671";
+    private static final String platformName = "Android";
+    private static final String platformVersion = "6.0";
+    private static final String appPackage = "com.ss.android.article.news";
+    private static final String appActivity = "com.ss.android.article.news.activity.SplashActivity";
 
     @Before
     public void setUp() throws Exception {
@@ -70,8 +70,6 @@ public class TestTouTiao {
         });
         System.out.println("webElement：" + webElement);
 
-        sleep(2);
-
         if (null != webElement) {
             webElement.isDisplayed();
         }
@@ -79,27 +77,104 @@ public class TestTouTiao {
 
         sleep(2);
 
-        //使用wait.until方法替代之前为了确保到达主页而做的点击
-        driver.findElementByAndroidUIAutomator("new UiSelector().resourceId(\"com.ss.android.article.news:id/category_text\").text(\"热点\")").click();//这个步骤完全是为了确保应用启动到首页了，而不是还在启动页
+        //点击 <热点> tab标签
+        driver.findElementByAndroidUIAutomator("new UiSelector().resourceId(\"com.ss.android.article.news:id/category_text\").text(\"热点\")").click();
 
-        sleep(2);
+        sleep(3);
 
-        driver.findElementByClassName("android.widget.ImageView").click();// 个人中心是整个页面的第一个ImageView
+        int i = 0;
+        while (i < 9) {
+            if (i < 2) {
+                AppiumSwipeUtils.swipeToDown(driver);
+                System.out.println("下滑");
+            }
+            if (i >= 2 && i < 4) {
+                AppiumSwipeUtils.swipeToUp(driver);
+                System.out.println("上滑");
+            }
+            if (i >= 4 && i < 6) {
+                AppiumSwipeUtils.swipeToLeft(driver);
+                System.out.println("左滑");
+            }
+            if (i >= 6 && i < 8) {
+                AppiumSwipeUtils.swipeToRight(driver);
+                System.out.println("右滑");
+            }
+            i++;
+            sleep(3);
+        }
+
+        driver.findElementById("com.ss.android.article.news:id/icon_category").click();
+
+        sleep(3);
+
+        driver.findElementByAndroidUIAutomator("new UiSelector().text(\"图片\")").click();
+
+        sleep(3);
+
+        // 个人中心是整个页面的第一个ImageView
+        driver.findElementByClassName("android.widget.ImageView").click();
+        sleep(3);
+
+
+        driver.findElementById("com.ss.android.article.news:id/night_btn").click();
+
+        sleep(3);
+
+
+        driver.findElementById("com.ss.android.article.news:id/night_btn").click();
+
+        sleep(3);
+
+
+        driver.findElementById("com.ss.android.article.news:id/setting_btn").click();
+
+        sleep(3);
+
+        driver.findElementById("com.ss.android.article.news:id/back").click();
+
+        sleep(3);
+
         List<WebElement> textViewList = driver.findElementsByClassName("android.widget.TextView");
-        WebElement moreType = null;
+        WebElement moreLogin = null;
         for (WebElement textView : textViewList) {
-            if (textView.getText().equals("更多登录方式")) {
-                moreType = textView;
+            if (textView.getText().contains("更多登录")) {
+                moreLogin = textView;
                 break;
             }
         }
-        moreType.click();
-        List<WebElement> buttonList = driver.findElementsByClassName("android.widget.Button");    //注册新账号为当前页面第二个button，且只有2个button
+        if (moreLogin != null) {
+            moreLogin.click();
+        }
+
+        sleep(3);
+
+        //注册新账号为当前页面第二个button，且只有2个button
+        List<WebElement> buttonList = driver.findElementsByClassName("android.widget.Button");
+
         buttonList.get(1).click();
 
-        driver.findElementByClassName("android.widget.EditText").sendKeys("12345678910");// 注册整个页面只有一个EditText
-        driver.findElementByClassName("android.widget.Button").click();// 此界面只有一个button“下一步”
-        driver.getPageSource().contains("手机号注册");//这一步输入不正确的手机号码时弹出框是toast，appium无法校验,所以验证界面还停留在当前页面即为成功
+        sleep(3);
+        // 注册整个页面只有一个EditText
+        driver.findElementByClassName("android.widget.EditText").sendKeys("12345678910");
+
+        sleep(3);
+        // 此界面只有一个button“下一步”
+        driver.findElementByClassName("android.widget.Button").click();
+
+        sleep(3);
+
+        driver.findElementById("com.ss.android.article.news:id/back").click();
+
+        sleep(3);
+
+        driver.findElementById("com.ss.android.article.news:id/back").click();
+
+        sleep(3);
+
+        driver.findElementById("com.ss.android.article.news:id/back").click();
+
+        sleep(3);
 
     }
 
